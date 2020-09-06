@@ -91,13 +91,6 @@ void insertSort(vector<int>& nums) {
 
 //#7 归并排序 - 归并
 {
-    void mergeSort(vector<int>& nums, int left, int right) {
-        if (left >= right) return;
-        int mid = left + (right - left) / 2;
-        mergeSort(nums, left, mid);
-        mergeSort(nums, mid + 1, right);
-        merge(nums, left, mid, right);
-    }
     void merge(vector<int>& nums, int a, int b , int c) {
         vector<int> nums2 {nums.begin()+b+1, nums.begin()+c+1};
         int x = b, y = nums2.size() - 1, z = c;
@@ -106,6 +99,28 @@ void insertSort(vector<int>& nums) {
             else nums[z--] = nums2[y--];
         }
         while (y >= 0) nums[z--] = nums2[y--];
+    }
+    void mergeSort(vector<int>& nums, int left, int right) { // 递归法
+        if (left >= right) return;
+        int mid = left + (right - left) / 2;
+        mergeSort(nums, left, mid);
+        mergeSort(nums, mid + 1, right);
+        merge(nums, left, mid, right);
+    }
+    void mergeSort(vector<int>& nums) { // 迭代法
+        int sz = 1, left, mid, right;
+        int N = nums.size();
+        while (sz < N) {
+            left = 0; // 先sz = 1排一波 sz = 2 排一波 ...
+            while (left + sz < N) {
+                mid = left + sz - 1;
+                right = mid + sz;
+                if (right >= N) right = N - 1;
+                merge(nums, left, mid, right);
+                left = right + 1;
+            }
+            sz *= 2;
+        }
     }
 }
 
